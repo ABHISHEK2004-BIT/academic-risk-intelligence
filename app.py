@@ -151,6 +151,7 @@ X_train, X_test, y_train, y_test, models = train_models(df)
 criterion = st.session_state.get("criterion", "entropy")
 model = models[criterion]
 tree = model.named_steps["classifier"]
+names = model.named_steps["preprocessor"].get_feature_names_out()
 X_all = df.drop(columns=["Academic_Risk"])
 y_all = df["Academic_Risk"]
 y_pred = model.predict(X_test)
@@ -336,7 +337,6 @@ elif view == "Model Performance":
 
 elif view == "Explainability":
     st.subheader("MODEL EXPLAINABILITY")
-    names=model.named_steps["preprocessor"].get_feature_names_out()
     importance=pd.Series(tree.feature_importances_,index=names).sort_values(ascending=False)
     c1,c2=st.columns([1,1.4])
     with c1:
